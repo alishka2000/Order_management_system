@@ -27,3 +27,7 @@ class Order(models.Model):
     @classmethod
     def get_revenue(cls):
         return cls.objects.filter(status="paid").aggregate(total_revenue=Sum("total_price"))["total_revenue"] or 0
+
+    def calculate_total_price(self):
+        self.total_price = sum(item["price"] for item in self.items)
+        self.save()
